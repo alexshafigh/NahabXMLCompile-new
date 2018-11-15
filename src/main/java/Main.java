@@ -32,8 +32,15 @@ public class Main {
 
     public static void main(final String[] args) throws Exception {
 
-        SaxReader saxReader = new SaxReader("E:/2.res");
-//        Organization organization = SaxReader.getMyHandler().getOrganization();
+//        XMLReader xmlReader = new XMLReader();
+////        xmlReader.Parse("E:/new 2.xml");
+//        xmlReader.Parse("E:/Error_nahab_Foreign_real.xml");
+
+        DomXmlReader domXmlReader = new DomXmlReader("E:/15.res");
+
+
+//        SaxReader saxReader = new SaxReader("E:/z.res");
+//        Organization organization = SaxReader.getOrganizationHandler().getOrganization();
 //        System.out.println(organization.getName());
 
 

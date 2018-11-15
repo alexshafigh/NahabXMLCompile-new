@@ -1,16 +1,18 @@
 import org.hibernate.Session;
+import org.hibernate.SessionException;
 import org.hibernate.SessionFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.sound.midi.Soundbank;
+import java.beans.Beans;
 import java.io.EOFException;
 
 /**
  * Created by saazimi on 15/11/2018.
  */
-public class MyHandler extends DefaultHandler {
+public class OrganizationHandler extends DefaultHandler {
 
 
     private boolean bNationalId;
@@ -20,20 +22,61 @@ public class MyHandler extends DefaultHandler {
     private boolean bRegisterLocation;
     private boolean bShahabCode;
     private boolean bIsConfirmed;
-    private boolean End;
-    Organization organization = new Organization() ;
-    SessionFactory sessionFactory = new org.hibernate.cfg.Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-    Session session = sessionFactory.openSession();
-    Connection connection ;// = new Connection();
+
+    private boolean bRegisterUnit;
+    private boolean bEstablishmentDate;
+    private boolean bLegalPersonType;
+    private boolean bErrorCode;
+    private boolean bErrorDescription;
+
+    public static final String ANSI_GREEN = "\u001B[32m";
+
+
+
+    SessionFactory sessionFactory;
+    Session session;
+    Organization organization;
+    long counter ;
 
 //    public Organization getOrganization() {
 //        return organization;
 //    }
 
+
+    public OrganizationHandler() {
+         organization = new Organization() ;
+////        Connection connection ;// = new Connection();
+         sessionFactory = new org.hibernate.cfg.Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+         session = sessionFactory.openSession();
+         counter = 0 ;
+
+    }
+
     public void startElement(String uri, String localName, String qName,
                              Attributes attributes) throws SAXException {
 
-            if (qName.equalsIgnoreCase("CorporatePersonResponse")) {
+            if (qName.equalsIgnoreCase("RegisterUnit")) {
+                bRegisterUnit = true;
+            }
+
+
+            if (qName.equalsIgnoreCase("LegalPersonType")) {
+                bLegalPersonType = true;
+            }
+
+            if (qName.equalsIgnoreCase("ErrorCode")) {
+                bErrorCode = true;
+            }
+
+            if (qName.equalsIgnoreCase("ErrorDescription")) {
+                bErrorDescription = true;
+            }
+
+           if (qName.equalsIgnoreCase("EstablishmentDate")) {
+            bEstablishmentDate = true;
+            }
+
+             if (qName.equalsIgnoreCase("CorporatePersonResponse")) {
 
             }
 
@@ -112,16 +155,19 @@ public class MyHandler extends DefaultHandler {
 
 
         if (qName.equalsIgnoreCase("CorporatePersonResponse")) {
-            session = sessionFactory.getCurrentSession();
+            if (session.isOpen()) {
+                counter ++ ;
+                System.out.println(ANSI_GREEN + "Total Number Of Organizations Ever is " +  counter);}
+            else {
+                throw new SessionException("Session_Is_Close");
+            }
+            session.beginTransaction();
             session.save(this.organization);
             session.getTransaction().commit();
-//            session.close();
-
+            organization = null;
+            organization = new Organization() ;
         }
     }
-//        if (qName.equalsIgnoreCase("CorporatePersonResponse"))
-
-//        System.out.println("End Element :" + qName);
 
 
 
@@ -163,15 +209,38 @@ public class MyHandler extends DefaultHandler {
             bShahabCode = false;
         }
 
+        if (bEstablishmentDate) {
+            organization.setEstablishmentDate( new String(ch, start, length));
+            bEstablishmentDate = false;
+        }
+
+        if (bLegalPersonType) {
+            organization.setLegalPersonType( new String(ch, start, length));
+            bLegalPersonType = false;
+        }
+        if (bErrorCode) {
+            organization.setErrorCode( new String(ch, start, length));
+            bErrorCode = false;
+        }
+        if (bErrorDescription) {
+            organization.setErrorDescription( new String(ch, start, length));
+            bErrorDescription = false;
+        }
+
         if (bIsConfirmed) {
             organization.setIsConfirmed( new String(ch, start, length));
             bIsConfirmed = false;
-//            End = true;
+        }
+        if (bRegisterUnit) {
+            organization.setRegisterUnit( new String(ch, start, length));
+            bRegisterUnit = false;
         }
 
+
+
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
+//    public Connection getConnection() {
+//        return connection;
+//    }
 }
