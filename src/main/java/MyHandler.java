@@ -1,3 +1,5 @@
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -20,6 +22,8 @@ public class MyHandler extends DefaultHandler {
     private boolean bIsConfirmed;
     private boolean End;
     Organization organization = new Organization() ;
+    SessionFactory sessionFactory = new org.hibernate.cfg.Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+    Session session = sessionFactory.openSession();
     Connection connection ;// = new Connection();
 
 //    public Organization getOrganization() {
@@ -100,20 +104,18 @@ public class MyHandler extends DefaultHandler {
 //            End = false;
 //        }
         if (qName.equalsIgnoreCase("OfflineNahab")){
-            connection.CloseSession();
-            connection.CloseFactory();
-            System.exit(0);
+                session.close();
+                sessionFactory.close();
+//            System.exit(0);
         }
 
 
 
         if (qName.equalsIgnoreCase("CorporatePersonResponse")) {
-            connection = new Connection();
-            connection.session.beginTransaction();
-            connection.getSession().save(this.organization);
-            connection.session.getTransaction().commit();
-//            connection.getSession().flush();
-            connection.getSession().close();
+            session = sessionFactory.getCurrentSession();
+            session.save(this.organization);
+            session.getTransaction().commit();
+//            session.close();
 
         }
     }
