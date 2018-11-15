@@ -17,7 +17,15 @@ public class Organization {
     private String ShahabCode;
     private String IsConfirmed;
 
-    public Organization(String nationalId, String name, String registerNumber, String registerDate, String registerLocation, String shahabCode, String isConfirmed) {
+    private String RegisterUnit;
+    private String EstablishmentDate;
+    private String LegalPersonType;
+    private String ErrorCode;
+    private String ErrorDescription;
+
+    public Organization(String nationalId, String name, String registerNumber, String registerDate,
+                        String registerLocation, String shahabCode, String isConfirmed , String registerUnit ,
+                        String establishmentDate , String legalPersonType ) {
         NationalId = nationalId;
         Name = name;
         RegisterNumber = registerNumber;
@@ -25,6 +33,9 @@ public class Organization {
         RegisterLocation = registerLocation;
         ShahabCode = shahabCode;
         IsConfirmed = isConfirmed;
+        RegisterUnit = registerUnit;
+        EstablishmentDate = establishmentDate;
+        LegalPersonType = legalPersonType;
     }
 
     public Organization() {
@@ -35,6 +46,60 @@ public class Organization {
         RegisterLocation = "";
         ShahabCode = "";
         IsConfirmed = "";
+        RegisterUnit = "";
+        EstablishmentDate = "";
+        LegalPersonType = "";
+        ErrorCode = "";
+        ErrorDescription = "";
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getRegisterUnit() {
+        return RegisterUnit;
+    }
+
+    public void setRegisterUnit(String registerUnit) {
+        RegisterUnit = registerUnit;
+    }
+
+    public String getEstablishmentDate() {
+        return EstablishmentDate;
+    }
+
+    public void setEstablishmentDate(String establishmentDate) {
+        EstablishmentDate = establishmentDate;
+    }
+
+    public String getLegalPersonType() {
+        return LegalPersonType;
+    }
+
+    public void setLegalPersonType(String legalPersonType) {
+        LegalPersonType = legalPersonType;
+    }
+
+    public String getErrorCode() {
+        return ErrorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        ErrorCode = errorCode;
+    }
+
+    public String getErrorDescription() {
+        return ErrorDescription;
+    }
+
+    public void setErrorDescription(String errorDescription) {
+        ErrorDescription = errorDescription;
     }
 
     public String getNationalId() {

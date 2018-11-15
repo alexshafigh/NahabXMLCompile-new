@@ -1,7 +1,14 @@
+import javax.persistence.*;
+
 /**
  * Created by saazimi on 15/11/2018.
  */
+@Entity
+@Table(name = "Person_nahab_Sample")
 public class Person {
+
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private String NationalCode;
     private String FirstName;
     private String LastName;
@@ -9,16 +16,46 @@ public class Person {
     private String IssueNumber;
     private String ShahabCode;
     private String IsConfirmed;
+    private String ErrorCode;
+    private String ErrorDescription;
 
-    public Person(String nationalCode, String firstName, String lastName, String birthDate, String issueNumber, String shahabCode, String isConfirmed) {
-        NationalCode = nationalCode;
-        FirstName = firstName;
-        LastName = lastName;
-        BirthDate = birthDate;
-        IssueNumber = issueNumber;
-        ShahabCode = shahabCode;
-        IsConfirmed = isConfirmed;
+    public Person() {
+        NationalCode = "";
+        FirstName ="";
+        LastName ="";
+        BirthDate = "";
+        IssueNumber = "";
+        ShahabCode = "";
+        IsConfirmed = "";
+        ErrorCode ="";
+        ErrorDescription = "";
     }
+
+    public String getErrorCode() {
+        return ErrorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        ErrorCode = errorCode;
+    }
+
+    public String getErrorDescription() {
+        return ErrorDescription;
+    }
+
+    public void setErrorDescription(String errorDescription) {
+        ErrorDescription = errorDescription;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
 
     public String getNationalCode() {
         return NationalCode;
